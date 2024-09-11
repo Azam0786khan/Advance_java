@@ -3,7 +3,7 @@ package in.com.rays.marksheet;
 public class MarksheetBean {
 	
 	private int id;
-	private int roll_no;
+	private int rollNo;
 	private String name;
 	private int physics;
 	private int chemistry;
@@ -16,13 +16,13 @@ public class MarksheetBean {
 	public void setId(int id) {
 		this.id = id;
 	}
-
-	public int getRoll_no() {
-		return roll_no;
+	
+	public int getRollNo() {
+		return rollNo;
 	}
 
-	public void setRoll_no(int roll_no) {
-		this.roll_no = roll_no;
+	public void setRollNo(int rollNo) {
+		this.rollNo = rollNo;
 	}
 
 	public String getName() {
