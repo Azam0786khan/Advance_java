@@ -4,15 +4,20 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.mysql.cj.protocol.Resultset;
 
 public class MarksheetModel {
 
 	public void add(MarksheetBean bean) throws Exception {
-		
+
 		MarksheetBean mb = findByRollNo(bean.getRollNo());
-		
-		if(mb != null) {
-			
+
+		if (mb != null) {
+
 			throw new RuntimeException("Duplicate Rollno. not allowed");
 		}
 
@@ -24,7 +29,7 @@ public class MarksheetModel {
 
 		pstmt.setInt(1, bean.getId());
 		pstmt.setInt(2, bean.getRollNo());
-		pstmt.setString(3, bean.getName());
+		pstmt.setString(3, bean.getname());
 		pstmt.setInt(4, bean.getPhysics());
 		pstmt.setInt(5, bean.getChemistry());
 		pstmt.setInt(6, bean.getMaths());
@@ -44,9 +49,8 @@ public class MarksheetModel {
 		PreparedStatement pstmt = conn.prepareStatement(
 				"update marksheet set roll_no = ?, name = ?, physics = ?, chemistry = ?, maths = ? where id = ?");
 
-
 		pstmt.setInt(1, bean.getRollNo());
-		pstmt.setString(2, bean.getName());
+		pstmt.setString(2, bean.getname());
 		pstmt.setInt(3, bean.getPhysics());
 		pstmt.setInt(4, bean.getChemistry());
 		pstmt.setInt(5, bean.getMaths());
@@ -56,22 +60,22 @@ public class MarksheetModel {
 
 		System.out.println("data updated = " + i);
 	}
-	
-	public void delete(int id) throws Exception{
-	
-	Class.forName("com.mysql.cj.jdbc.Driver");
 
-	Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", "root");
+	public void delete(int id) throws Exception {
 
-	PreparedStatement pstmt = conn.prepareStatement("delete from marksheet where id = ?");
-	
-	pstmt.setInt(1, id);
-	
-	int i = pstmt.executeUpdate();	
-	
-	System.out.println("Data Deleted = " + i);
+		Class.forName("com.mysql.cj.jdbc.Driver");
+
+		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", "root");
+
+		PreparedStatement pstmt = conn.prepareStatement("delete from marksheet where id = ?");
+
+		pstmt.setInt(1, id);
+
+		int i = pstmt.executeUpdate();
+
+		System.out.println("Data Deleted = " + i);
 	}
-	
+
 	public MarksheetBean findByPk(int id) throws Exception {
 
 		Class.forName("com.mysql.cj.jdbc.Driver");
@@ -90,13 +94,14 @@ public class MarksheetModel {
 			bean = new MarksheetBean();
 			bean.setId(rs.getInt(1));
 			bean.setRollNo(rs.getInt(2));
-			bean.setName(rs.getString(3));
+			bean.setname(rs.getString(3));
 			bean.setPhysics(rs.getInt(4));
 			bean.setChemistry(rs.getInt(5));
 			bean.setMaths(rs.getInt(6));
 		}
 		return bean;
 	}
+
 	public MarksheetBean findByRollNo(int roll_no) throws Exception {
 
 		Class.forName("com.mysql.cj.jdbc.Driver");
@@ -115,11 +120,84 @@ public class MarksheetModel {
 			bean = new MarksheetBean();
 			bean.setId(rs.getInt(1));
 			bean.setRollNo(rs.getInt(2));
-			bean.setName(rs.getString(3));
+			bean.setname(rs.getString(3));
 			bean.setPhysics(rs.getInt(4));
 			bean.setChemistry(rs.getInt(5));
 			bean.setMaths(rs.getInt(6));
 		}
 		return bean;
+	}
+
+	public List readAll() throws Exception {
+
+		Class.forName("com.mysql.cj.jdbc.Driver");
+
+		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", "root");
+
+		PreparedStatement stmt = conn.prepareStatement("select * from marksheet");
+
+		ResultSet rs = stmt.executeQuery();
+
+		List list = new ArrayList();
+
+		while (rs.next()) {
+
+			MarksheetBean bean = new MarksheetBean();
+
+			bean.setId(rs.getInt(1));
+			bean.setRollNo(rs.getInt(1));
+			bean.setname(rs.getString(3));
+			bean.setPhysics(rs.getInt(4));
+			bean.setChemistry(rs.getInt(5));
+			bean.setMaths(rs.getInt(6));
+			list.add(bean);
+		}
+		return list;
+
+	}
+
+	public List search1(MarksheetBean bean) throws Exception {
+
+		Class.forName("com.mysql.cj.jdbc.Driver");
+
+		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", "root");
+
+		StringBuffer sql = new StringBuffer("select * from marksheet where 1=1");
+
+		if (bean != null) {
+
+			if (bean.getname() != null && bean.getname().length() > 0) {
+
+				sql.append(" and name like '" + bean.getname() + "%'");
+			}
+			if (bean.getRollNo() > 0) {
+				sql.append("and roll_no =" + bean.getRollNo());
+
+			}
+
+		}
+
+		System.out.println("sql =" + sql);
+
+		PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+
+		ResultSet rs = pstmt.executeQuery();
+
+		List list = new ArrayList();
+
+		while (rs.next()) {
+
+			bean = new MarksheetBean();
+			bean.setId(rs.getInt(1));
+			bean.setRollNo(rs.getInt(2));
+			bean.setname(rs.getString(3));
+			bean.setPhysics(rs.getInt(4));
+			bean.setChemistry(rs.getInt(5));
+			bean.setMaths(rs.getInt(6));
+			list.add(bean);
+		}
+
+		return list;
+
 	}
 }

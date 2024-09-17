@@ -25,11 +25,11 @@ public class MarksheetBean {
 		this.rollNo = rollNo;
 	}
 
-	public String getName() {
+	public String getname() {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setname(String name) {
 		this.name = name;
 	}
 
@@ -56,5 +56,7 @@ public class MarksheetBean {
 	public void setMaths(int maths) {
 		this.maths = maths;
 	}
+
+	
 
 }
