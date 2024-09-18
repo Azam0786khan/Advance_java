@@ -1,4 +1,4 @@
-package in.co.com.rays.user;
+package in.com.rays.user;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

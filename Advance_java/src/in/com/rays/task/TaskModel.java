@@ -1,4 +1,4 @@
-package in.co.com.rays.task;
+package in.com.rays.task;
 
 import java.io.BufferedReader;
 import java.sql.Connection;

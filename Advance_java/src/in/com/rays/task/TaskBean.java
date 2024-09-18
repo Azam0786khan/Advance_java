@@ -1,4 +1,4 @@
-package in.co.com.rays.task;
+package in.com.rays.task;
 
 import java.util.Date;
 
